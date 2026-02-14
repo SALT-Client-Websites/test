@@ -1,3 +1,92 @@
+// Get current page and post from URL
+function getCurrentPageFromURL() {
+  const path = window.location.pathname;
+  const pathParts = path.split('/').filter(part => part !== '');
+  
+  let page = 'home';
+  let post = '';
+  
+  if (pathParts.length > 0) {
+    if (pathParts[0] === 'blog') {
+      page = 'blog';
+      if (pathParts.length > 1) {
+        post = pathParts[1];
+      }
+    } else if (['about', 'amenities', 'gallery', 'contact'].includes(pathParts[0])) {
+      page = pathParts[0];
+    }
+  }
+  
+  return { page, post };
+}
+
+// Helper functions for showing/hiding sections
+function showSection(id) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.style.display = 'block';
+  }
+}
+
+function hideSection(id) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.style.display = 'none';
+  }
+}
+
+function showFooter2() {
+  const footer2 = document.getElementById("footer-2");
+  if (footer2) {
+    footer2.style.display = "flex";
+  }
+}
+
+// Handle page display based on current URL
+function showPageBasedOnURL() {
+  const { page, post } = getCurrentPageFromURL();
+  
+  // Hide all sections first
+  hideSectionsOnLoad();
+  
+  if (page === 'blog' && post) {
+    // Show specific blog post
+    const postMapping = {
+      'what-to-know-before-renting-apartment-paulding-ohio': 'post-one',
+      'best-towns-live-near-van-wert-ohio-paulding-stands-out': 'post-two',
+      'things-to-do-near-paulding-ohio-local-favorites-day-trips': 'post-three',
+      'paulding-small-town-feel-big-comfort-close-home': 'post-four',
+      'commuter-friendly-living-paulding-county': 'post-five',
+      'local-dining-small-businesses-near-whispering-pines': 'post-six'
+    };
+    
+    const postId = postMapping[post];
+    if (postId) {
+      showSection(postId);
+      showFooter2();
+    }
+  } else if (page === 'blog') {
+    // Show blog listing
+    showSection('blog');
+    showFooter2();
+  } else if (page === 'home') {
+    // Show home sections
+    showSectionExeptBlog();
+  } else {
+    // Show specific section
+    showSectionExeptBlog();
+    // Scroll to specific section
+    setTimeout(() => {
+      const element = document.getElementById(page === 'about' ? 'abouts' : page);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  }
+}
+
+// Initialize page based on current URL - REMOVED to avoid conflict with PHP
+
 function hideSectionsOnLoad() {
   const sections = [
     "blog",
@@ -19,6 +108,40 @@ function hideSectionsOnLoad() {
 }
 
 function showPostByClickingSeeMore(btnId, idTohide) {
+  const postTitles = {
+    "#post-two-btn-1": "Best Towns to Live Near Van Wert, Ohio — And Why Paulding Stands Out",
+    "#post-three-btn-1": "Things to Do Near Paulding, Ohio: From Local Favorites to Easy Day Trips",
+    "#post-four-btn-1": "Paulding's Small-Town Feel: Big Comfort, Close to Home",
+    "#post-five-btn-1": "Commuter-Friendly Living in Paulding County",
+    "#post-six-btn-1": "Local Dining & Small Businesses Near Whispering Pines",
+    "#post-one-btn-2": "What to Know Before Renting an Apartment in Paulding, Ohio",
+    "#post-three-btn-2": "Things to Do Near Paulding, Ohio: From Local Favorites to Easy Day Trips",
+    "#post-four-btn-2": "Paulding's Small-Town Feel: Big Comfort, Close to Home",
+    "#post-five-btn-2": "Commuter-Friendly Living in Paulding County",
+    "#post-six-btn-2": "Local Dining & Small Businesses Near Whispering Pines",
+    "#post-one-btn-3": "What to Know Before Renting an Apartment in Paulding, Ohio",
+    "#post-two-btn-3": "Best Towns to Live Near Van Wert, Ohio — And Why Paulding Stands Out",
+    "#post-four-btn-3": "Paulding's Small-Town Feel: Big Comfort, Close to Home",
+    "#post-five-btn-3": "Commuter-Friendly Living in Paulding County",
+    "#post-six-btn-3": "Local Dining & Small Businesses Near Whispering Pines",
+    "#post-one-btn-4": "What to Know Before Renting an Apartment in Paulding, Ohio",
+    "#post-two-btn-4": "Best Towns to Live Near Van Wert, Ohio — And Why Paulding Stands Out",
+    "#post-three-btn-4": "Things to Do Near Paulding, Ohio: From Local Favorites to Easy Day Trips",
+    "#post-four-btn-4": "Paulding's Small-Town Feel: Big Comfort, Close to Home",
+    "#post-five-btn-4": "Commuter-Friendly Living in Paulding County",
+    "#post-six-btn-4": "Local Dining & Small Businesses Near Whispering Pines",
+    "#post-one-btn-5": "What to Know Before Renting an Apartment in Paulding, Ohio",
+    "#post-two-btn-5": "Best Towns to Live Near Van Wert, Ohio — And Why Paulding Stands Out",
+    "#post-three-btn-5": "Things to Do Near Paulding, Ohio: From Local Favorites to Easy Day Trips",
+    "#post-four-btn-5": "Paulding's Small-Town Feel: Big Comfort, Close to Home",
+    "#post-six-btn-5": "Local Dining & Small Businesses Near Whispering Pines",
+    "#post-one-btn-6": "What to Know Before Renting an Apartment in Paulding, Ohio",
+    "#post-two-btn-6": "Best Towns to Live Near Van Wert, Ohio — And Why Paulding Stands Out",
+    "#post-three-btn-6": "Things to Do Near Paulding, Ohio: From Local Favorites to Easy Day Trips",
+    "#post-four-btn-6": "Paulding's Small-Town Feel: Big Comfort, Close to Home",
+    "#post-five-btn-6": "Commuter-Friendly Living in Paulding County",
+  };
+
   $(btnId).click(function (e) {
     e.preventDefault();
 
@@ -29,6 +152,20 @@ function showPostByClickingSeeMore(btnId, idTohide) {
     });
 
     $(idToShow).show();
+
+    // Update URL based on blog post title
+    const title = postTitles[btnId];
+    if (title) {
+      // Create URL-friendly title from post title
+      const urlTitle = title.toLowerCase()
+        .replace(/[^a-z0-9\s-']/g, '') // Remove special characters except hyphens and apostrophes
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/-+/g, '-'); // Replace multiple hyphens with single
+      
+      // Update URL - use clean SEO-friendly URL without navigation
+      const newUrl = `/${urlTitle}`;
+      history.pushState({ page: 'blog', post: urlTitle }, '', newUrl);
+    }
 
     window.scrollTo({
       top: 0,
@@ -62,7 +199,20 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
     e.preventDefault();
 
-    const target = document.querySelector(this.getAttribute("href"));
+    const href = this.getAttribute("href");
+    
+    // Skip if href is just "#"
+    if (href === "#" || !href) {
+      return;
+    }
+
+    const target = document.querySelector(href);
+    
+    // Skip if target element doesn't exist
+    if (!target) {
+      return;
+    }
+
     const headerOffset = 100;
     const elementPosition = target.getBoundingClientRect().top;
     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
@@ -169,6 +319,7 @@ function pageShower(postBtn, post, sectionToShow) {
 
 // Handle page / post shower
 function blogPostShower() {
+
   const postButtons = [
     "post-one-btn",
     "post-two-btn",
@@ -178,11 +329,68 @@ function blogPostShower() {
     "post-six-btn",
   ];
 
+  const postTitles = {
+    "post-one-btn": "What to Know Before Renting an Apartment in Paulding, Ohio",
+    "post-two-btn": "Best Towns to Live Near Van Wert, Ohio — And Why Paulding Stands Out",
+    "post-three-btn": "Things to Do Near Paulding, Ohio_ From Local Favorites to Easy Day Trips",
+    "post-four-btn": "Paulding's Small-Town Feel_ Big Comfort, Close to Home",
+    "post-five-btn": "Commuter-Friendly Living in Paulding County",
+    "post-six-btn": "Local Dining & Small Businesses Near Whispering Pines"
+  };
+
   postButtons.forEach((button) => {
     const postName = button.replace("-btn", "");
     const postBtn = document.getElementById(button);
     const postId = document.getElementById(postName);
-    pageShower(postBtn, postId, postName);
+    
+    if (postBtn && postId) {
+      postBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        
+        // Hide all sections
+        let sectionsToHide = [
+          "about", "amenities", "gallery", "contact", "hero", "map", "cta", "footer",
+          "blog", "post-one", "post-two", "post-three", "post-four", "post-five", "post-six"
+        ];
+        
+        sectionsToHide.forEach((id) => {
+          const section = document.getElementById(id);
+          if (section) {
+            section.style.display = "none";
+          }
+        });
+        
+        // Show selected post
+        postId.style.display = "block";
+        
+        // Show footer2
+        const footer2 = document.getElementById("footer-2");
+        if (footer2) {
+          footer2.style.display = "flex";
+        }
+        
+        // Get blog post title and convert to URL
+        const title = postTitles[button];
+        
+        if (title) {
+          // Create URL-friendly title from post title
+          const urlTitle = title.toLowerCase()
+            .replace(/[^a-z0-9\s]+/g, '') // Remove special characters
+            .replace(/\s+/g, '-') // Replace spaces with hyphens
+            .replace(/-+/g, '-'); // Replace multiple hyphens with single
+          
+          // Update URL - use clean SEO-friendly URL without navigation
+          const newUrl = `/${urlTitle}`;
+          history.pushState({ page: 'blog', post: urlTitle }, '', newUrl);
+        }
+        
+        // Scroll to top
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      });
+    }
   });
 }
 

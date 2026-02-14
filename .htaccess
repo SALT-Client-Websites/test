@@ -1,0 +1,22 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Handle blog post URLs
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9-]+)$ index.php?page=blog&post=$1 [L,QSA]
+
+# Handle regular pages
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(about|amenities|gallery|contact)$ index.php?page=$1 [L,QSA]
+
+# Handle blog listing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^blog$ index.php?page=blog [L,QSA]
+
+# Handle root
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^$ index.php?page=home [L,QSA]
