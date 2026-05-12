@@ -90,6 +90,7 @@ function showPageBasedOnURL() {
 function hideSectionsOnLoad() {
   const sections = [
     "blog",
+    "storage-units",
     "post-one",
     "post-two",
     "post-three",
@@ -748,6 +749,7 @@ $(document).ready(function () {
   about.addEventListener("click", (event) => {
     event.preventDefault();
 
+    hideStoragePage();
     hideBlogPage();
     showSectionExeptBlog();
     scrollTo(event);
@@ -758,6 +760,7 @@ $(document).ready(function () {
   amenity.addEventListener("click", (event) => {
     event.preventDefault();
 
+    hideStoragePage();
     hideBlogPage();
     showSectionExeptBlog();
     scrollTo(event);
@@ -768,6 +771,7 @@ $(document).ready(function () {
   gallery.addEventListener("click", (event) => {
     event.preventDefault();
 
+    hideStoragePage();
     hideBlogPage();
     showSectionExeptBlog();
     scrollTo(event);
@@ -778,9 +782,87 @@ $(document).ready(function () {
   contacts.addEventListener("click", (event) => {
     event.preventDefault();
 
+    hideStoragePage();
     hideBlogPage();
     showSectionExeptBlog();
     scrollTo(event);
+  });
+
+  // When storage units is clicked
+  const storageLink = document.getElementById("storage-link");
+  if (storageLink) {
+    storageLink.addEventListener("click", (event) => {
+      event.preventDefault();
+
+      const sectionsToHide = [
+        "about", "amenities", "gallery", "contact",
+        "hero", "map", "cta", "footer",
+        "blog", "post-one", "post-two", "post-three",
+        "post-four", "post-five", "post-six", "footer-2",
+      ];
+      sectionsToHide.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+      });
+
+      const storageSection = document.getElementById("storage-units");
+      if (storageSection) storageSection.style.display = "block";
+
+      const footer = document.getElementById("footer");
+      if (footer) footer.style.display = "flex";
+
+      // Re-render reCAPTCHA inside hidden section now that it's visible
+      if (typeof grecaptcha !== "undefined") {
+        try { grecaptcha.reset(); } catch (e) {}
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  // Storage unit form AJAX submission
+  $("#storage-form").submit(function (e) {
+    e.preventDefault();
+
+    const form = $(this);
+    const submitBtn = form.find('button[type="submit"]');
+    const msgBox = form.find("#storage-form-message");
+    const originalText = submitBtn.text();
+
+    submitBtn.prop("disabled", true).text(submitBtn.data("loading-text"));
+
+    $.ajax({
+      url: form.attr("action"),
+      type: form.attr("method"),
+      data: form.serialize(),
+      dataType: "json",
+      success: function (response) {
+        if (response.status === "true") {
+          msgBox.html(
+            '<div style="padding:10px; background:#d4edda; color:#155724; border-radius:6px;">' +
+              response.message + "</div>"
+          );
+          setTimeout(function () {
+            form[0].reset();
+            if (typeof grecaptcha !== "undefined") grecaptcha.reset();
+            submitBtn.prop("disabled", false).text(originalText);
+            msgBox.fadeOut("slow");
+          }, 5000);
+        } else {
+          msgBox.html(
+            '<div style="padding:10px; background:#f8d7da; color:#721c24; border-radius:6px;">' +
+              response.message + "</div>"
+          );
+          submitBtn.prop("disabled", false).text(originalText);
+        }
+      },
+      error: function () {
+        msgBox.html(
+          '<div style="padding:10px; background:#f8d7da; color:#721c24; border-radius:6px;">An error occurred. Please try again.</div>'
+        );
+        submitBtn.prop("disabled", false).text(originalText);
+      },
+    });
   });
 
   function showFooter2() {
@@ -814,6 +896,11 @@ function hideBlogPage() {
   blogSection.style.display = "none";
 }
 
+function hideStoragePage() {
+  const storageSection = document.getElementById("storage-units");
+  if (storageSection) storageSection.style.display = "none";
+}
+
 // Hide all section when blog is clicked
 document.addEventListener("DOMContentLoaded", () => {
   const blogLink = document.getElementById("blog-link");
@@ -842,6 +929,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     blogSection.style.display = "block";
     footer2.style.display = "flex";
+    hideStoragePage();
 
     sectionsToHide.forEach((id) => {
       const section = document.getElementById(id);

@@ -173,14 +173,6 @@ nav a {
   margin-top: 4.6rem;
 }
 
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: url("hero.jpg") center/cover no-repeat;
-  transform: scale(1.05);
-}
-
 .hero::after {
   position: absolute;
   inset: 0;
@@ -712,6 +704,204 @@ ul {
 
 .contact-submit:hover {
   background: #1b3a2b;
+}
+
+/* ---------- Storage Units Section ---------- */
+
+.su-hero {
+  position: relative;
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+  background-image: url("../images/wp_rental_units.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-top: 4.6rem;
+}
+
+.su-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 60, 46, 0.78);
+}
+
+.su-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 2rem 1rem;
+  max-width: 800px;
+  animation: fadeUp 0.8s ease both;
+}
+
+.su-hero-content h1 {
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: #fff;
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.su-hero-content p {
+  font-size: 1.05rem;
+  opacity: 0.92;
+}
+
+.su-section {
+  padding: 60px 20px 40px;
+}
+
+.su-intro {
+  max-width: 760px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.su-intro h2 {
+  font-size: 2rem;
+}
+
+.su-units-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.su-unit-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(16, 60, 46, 0.10);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+}
+
+.su-unit-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 36px rgba(16, 60, 46, 0.16);
+}
+
+.su-unit-featured {
+  border: 2px solid var(--green);
+}
+
+.su-unit-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 5;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  color: #fff;
+}
+
+.su-badge-small {
+  background: #66736c;
+}
+
+.su-badge-large {
+  background: var(--green-dark);
+}
+
+.su-unit-image-wrap {
+  height: 200px;
+  overflow: hidden;
+}
+
+.su-unit-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+}
+
+.su-unit-body {
+  padding: 24px;
+}
+
+.su-unit-size {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--green-dark);
+  font-family: "Open Sans", sans-serif;
+  margin-bottom: 4px;
+}
+
+.su-unit-price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--green-dark);
+  margin-bottom: 12px;
+}
+
+.su-unit-price span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.su-unit-desc {
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.su-unit-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 22px;
+}
+
+.su-unit-features li {
+  font-size: 0.9rem;
+  color: var(--green-dark);
+  font-weight: 500;
+  padding: 3px 0;
+}
+
+.su-cta-btn {
+  display: block;
+  text-align: center;
+  background: var(--green-dark);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.25s ease, transform 0.2s ease;
+  text-decoration: none;
+}
+
+.su-cta-btn:hover {
+  background: var(--green);
+  transform: scale(1.03);
+}
+
+.su-form-section {
+  background: #f4f6f0;
+}
+
+/* Responsive storage units */
+@media (max-width: 768px) {
+  .su-units-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .su-hero-content h1 {
+    font-size: 2rem;
+  }
 }
 
 /* ---------- Animation ---------- */
